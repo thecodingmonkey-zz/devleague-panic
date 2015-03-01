@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Devleague Panic!</title>
   <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="./styles/reset.css">
   <link rel="stylesheet" type="text/css" href="./styles/styles.css">
 </head>
 <body>
@@ -13,11 +14,24 @@
 
   </div>
   <div id="gameplay">
-    <div id="party_member_1"></div>
-    <div id="party_member_2"></div>
-    <div id="party_member_3"></div>
-    <div id="party_member_4"></div>    
+    <div id="main_window"></div>
+
+    <div id="deadline">&nbsp;</div>
+    <div id="tasks">&nbsp;</div>
+
+    <div id="left_bar">
+      <div id="party_member_1" class="party"></div>
+      <div id="party_member_2" class="party"></div>
+    </div>
+    <div id="right_bar">
+      <div id="party_member_3" class="party"></div>
+      <div id="party_member_4" class="party"></div>    
+    </div>
+
+    <div id="status"> Useful text goes here.
+    </div>
   </div>
+  <script src="./js/classes.js"></script>
   <script src="./js/dl-panic.js"></script>
 </body>
 </html>
