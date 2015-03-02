@@ -23,10 +23,15 @@ function WorkTask() {
   this.assigned = null;
 }
 
-WorkTask.prototype.doTick = function() {
+WorkTask.prototype.doTick = function(delay) {
   if (this.assigned !== null) {
-    this.frontend_left -= this.assigned.frontend;
-    this.backend_left  -= this.assigned.backend;
+    this.frontend_left -= this.assigned.frontend * delay/1000;
+    this.backend_left  -= this.assigned.backend * delay/1000;
+
+    this.frontend_left = this.frontend_left > 0 ? this.frontend_left : 0;
+    this.backend_left = this.backend_left > 0 ? this.backend_left : 0;
   }
-  this.secondsLeft--;
+  this.secondsLeft = this.secondsLeft - delay/1000.0;
+
 };
+

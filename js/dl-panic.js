@@ -56,23 +56,24 @@ $(document).ready ( function() {
     target.append(nameTxt);
   }
 
-  gameLoop();
+  var gameDelay = 100;
   var deadlineY = 1000;
+  gameLoop(gameDelay);
 
-  function gameLoop() {
+  function gameLoop(delay) {
     if (gameStart === false) {
-      window.setTimeout(function() { gameLoop(); }, 1000);
+      window.setTimeout(function() { gameLoop(1000); }, 1000);
       return;
     }
 
     console.log('ping');
-    renderTasks();
+    renderTasks(delay);
 
     $(".party").css("border", "5px solid black");
     $($(".party")[active_party-1]).css("border", "5px solid red");    
 
     deadlineY = $("#deadline").offset().top;
-    window.setTimeout(function() { gameLoop(); }, 100);
+    window.setTimeout(function() { gameLoop(gameDelay); }, gameDelay);
 
   }
 
@@ -83,11 +84,11 @@ $(document).ready ( function() {
   tasks[0].backend_left = 500;
   tasks[0].backend = 500;
   tasks[0].secondsLeft = 100;
-  tasks[0].secondsTotal = 100;
+  tasks[0].secondsTotal = 120;
   tasks[0].reward = 10;
   tasks[0].pic = "";
 
-  function renderTask(task) {
+  function renderTask(task, delay) {
     var result = $("<div>");
     result.addClass("task");
 
@@ -101,19 +102,24 @@ $(document).ready ( function() {
         result.height()
 
       );
+    result.css("left", "300");
 
     result.html('' + task.frontend_left + ' - ' +
         task.backend_left);
 
+    result.click(function() {
+      task.assigned = party[active_party-1];
+    });
+
     return result;
   }
 
-  function renderTasks() {
+  function renderTasks(delay) {
     $(".task").remove();
 
     tasks.forEach(function(val, idx) {
-      val.doTick();
-      $("#tasks").append(renderTask(val) );
+      val.doTick(delay);
+      $("#tasks").append(renderTask(val, delay));
     });
 
   }
