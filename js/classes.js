@@ -19,11 +19,14 @@ function WorkTask() {
 
   this.reward = 10;
   this.pic = "";
+  this.left = 0;
 
   this.assigned = null;
 }
 
 WorkTask.prototype.doTick = function(delay) {
+//  console.log(delay, this.secondsLeft);
+
   if (this.assigned !== null) {
     this.frontend_left -= this.assigned.frontend * delay/1000;
     this.backend_left  -= this.assigned.backend * delay/1000;

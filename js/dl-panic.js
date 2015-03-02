@@ -56,7 +56,7 @@ $(document).ready ( function() {
     target.append(nameTxt);
   }
 
-  var gameDelay = 100;
+  var gameDelay = 200;
   var deadlineY = 1000;
   gameLoop(gameDelay);
 
@@ -66,7 +66,7 @@ $(document).ready ( function() {
       return;
     }
 
-    console.log('ping');
+//    console.log('ping');
     renderTasks(delay);
 
     $(".party").css("border", "5px solid black");
@@ -77,16 +77,24 @@ $(document).ready ( function() {
 
   }
 
-  tasks[0] = new WorkTask();
-  tasks[0].name = "PixelPainter";
-  tasks[0].frontend_left = 500;
-  tasks[0].frontend = 500;
-  tasks[0].backend_left = 500;
-  tasks[0].backend = 500;
-  tasks[0].secondsLeft = 100;
-  tasks[0].secondsTotal = 120;
-  tasks[0].reward = 10;
-  tasks[0].pic = "";
+  function makeTask(name, frontend, backend, time, reward, pic) {
+    var newItem = new WorkTask();
+
+    newItem.name = name;
+    newItem.frontend = frontend;
+    newItem.frontend_left = frontend;
+    newItem.backend = backend;
+    newItem.backend_left = backend;
+    newItem.secondsLeft = time;
+    newItem.secondsTotal = time;
+    newItem.reward = reward;
+    newItem.pic = pic;
+    newItem.left = 300;
+
+    tasks.push(newItem);
+  }
+
+  makeTask("PixelPainter", 500, 500, 30, 10, "");
 
   function renderTask(task, delay) {
     var result = $("<div>");
@@ -102,7 +110,7 @@ $(document).ready ( function() {
         result.height()
 
       );
-    result.css("left", "300");
+    result.css("left", task.left);
 
     result.html('' + task.frontend_left + ' - ' +
         task.backend_left);
@@ -118,6 +126,10 @@ $(document).ready ( function() {
     $(".task").remove();
 
     tasks.forEach(function(val, idx) {
+      if (val === null) {
+        return;
+      }
+
       val.doTick(delay);
       $("#tasks").append(renderTask(val, delay));
     });
