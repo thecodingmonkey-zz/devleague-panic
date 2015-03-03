@@ -21,6 +21,8 @@ function WorkTask() {
   this.pic = "";
   this.left = 0;
 
+  this.docElement = null;
+
   this.assigned = null;
 }
 

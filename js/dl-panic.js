@@ -97,8 +97,15 @@ $(document).ready ( function() {
   makeTask("PixelPainter", 500, 500, 30, 10, "");
 
   function renderTask(task, delay) {
-    var result = $("<div>");
-    result.addClass("task");
+    var result;
+    if (task.docElement) {
+      result = task.docElement;
+    }
+    else {
+      result = $("<div>");
+      result.addClass("task");
+    }
+
 
     var tmp;
 
