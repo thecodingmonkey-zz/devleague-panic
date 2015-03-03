@@ -24,21 +24,25 @@ $(document).ready ( function() {
   party[0].name = 'Andrew';
   party[0].frontend = 50;
   party[0].backend = 200;
+  party[0].pic = './assets/sloth.png';
   
   party[1] = new PartyMember();
   party[1].name = 'Jackie';
   party[1].frontend = 200;
   party[1].backend = 150;
+  party[1].pic = './assets/squid.png';
   
   party[2] = new PartyMember();
   party[2].name = 'Jon';
   party[2].frontend = 100;
   party[2].backend = 150;
+  party[2].pic = './assets/turtle.png';
   
   party[3] = new PartyMember();
   party[3].name = 'Kelli';
   party[3].frontend = 250;
   party[3].backend = 10;
+  party[3].pic = './assets/seal.png';
 
   renderPartyMember("party_member_1", party[0]);
   renderPartyMember("party_member_2", party[1]);
@@ -104,6 +108,8 @@ $(document).ready ( function() {
     else {
       result = $("<div>");
       result.addClass("task");
+      $("#tasks").append(result);
+      task.docElement = result;
     }
 
 
@@ -122,7 +128,8 @@ $(document).ready ( function() {
     result.html('' + task.frontend_left + ' - ' +
         task.backend_left);
 
-    result.click(function() {
+    // mousedown instead of click, to trigger more easily
+    result.on("mousedown", function() {
       task.assigned = party[active_party-1];
     });
 
@@ -130,7 +137,7 @@ $(document).ready ( function() {
   }
 
   function renderTasks(delay) {
-    $(".task").remove();
+//    $(".task").remove();
 
     tasks.forEach(function(val, idx) {
       if (val === null) {
@@ -138,7 +145,13 @@ $(document).ready ( function() {
       }
 
       val.doTick(delay);
-      $("#tasks").append(renderTask(val, delay));
+      renderTask(val, delay);
+
+      if (val.isDone() ) {
+        val.docElement.hide();
+        val.docElement.remove();
+        val = null;
+      }
     });
 
   }

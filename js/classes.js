@@ -40,3 +40,6 @@ WorkTask.prototype.doTick = function(delay) {
 
 };
 
+WorkTask.prototype.isDone = function() {
+  return ((this.frontend_left <= 0) && (this.backend_left <= 0));
+};
