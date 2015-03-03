@@ -98,8 +98,6 @@ $(document).ready ( function() {
   }
 
   makeTaskWave(1000, 4);
-//  makeTask("PixelPainter", 500, 500, 30, 10, "");
-
 
   function makeTask(name, frontend, backend, time, reward, leftPos, pic) {
     var newItem = new WorkTask();
@@ -148,15 +146,23 @@ $(document).ready ( function() {
         task.backend_left);
 
     // mousedown instead of click, to trigger more easily
-    result.on("mousedown", function() {
+    result.on("mousedown", function(event) {
       task.assigned = party[active_party-1];
+      party[active_party-1].assignedTask = 
+        tasks.indexOf(task);
+//        $.grep(tasks, function(e) { return task === e; });
+
+      //tasks.find(task);
     });
 
     return result;
   }
 
   function renderTasks(delay) {
-//    $(".task").remove();
+
+    party.forEach(function(val, idx) {
+      val.doWork(delay, tasks);
+    });
 
     tasks.forEach(function(val, idx) {
       if (val === null) {
