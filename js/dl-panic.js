@@ -70,7 +70,6 @@ $(document).ready ( function() {
       return;
     }
 
-//    console.log('ping');
     renderTasks(delay);
 
     $(".party").css("border", "5px solid black");
@@ -81,7 +80,28 @@ $(document).ready ( function() {
 
   }
 
-  function makeTask(name, frontend, backend, time, reward, pic) {
+  function makeTaskWave(difficulty, num) {
+    var i;
+
+    for(i=0; i<num; i++) {
+      var share1 = Math.random();
+      var share2 = 1 - share1;
+
+      var fe, be;
+      var total = Math.pow(difficulty, 2);
+      fe = Math.sqrt(total * share1);
+      be = Math.sqrt(total * share2);
+
+      makeTask("Task", fe, be, 30, difficulty, i, "");
+    }
+
+  }
+
+  makeTaskWave(1000, 4);
+//  makeTask("PixelPainter", 500, 500, 30, 10, "");
+
+
+  function makeTask(name, frontend, backend, time, reward, leftPos, pic) {
     var newItem = new WorkTask();
 
     newItem.name = name;
@@ -93,12 +113,11 @@ $(document).ready ( function() {
     newItem.secondsTotal = time;
     newItem.reward = reward;
     newItem.pic = pic;
-    newItem.left = 300;
+    newItem.left = 300 + 110 * leftPos;
 
     tasks.push(newItem);
   }
 
-  makeTask("PixelPainter", 500, 500, 30, 10, "");
 
   function renderTask(task, delay) {
     var result;
