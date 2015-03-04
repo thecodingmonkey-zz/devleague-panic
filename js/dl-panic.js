@@ -11,7 +11,7 @@ $(document).ready ( function() {
 
 
   var score = 0;
-  var difficulty = 100;
+  var difficulty = 1000;
 
   var party = [];
   var tasks = [];
@@ -62,6 +62,9 @@ $(document).ready ( function() {
 
   var gameDelay = 200;
   var deadlineY = 1000;
+  var timeNextWave = 10;
+  var defaultTimeNextWave = 10;
+
   gameLoop(gameDelay);
 
   function gameLoop(delay) {
@@ -69,6 +72,17 @@ $(document).ready ( function() {
       window.setTimeout(function() { gameLoop(1000); }, 1000);
       return;
     }
+
+    timeNextWave = timeNextWave - delay/1000;
+
+//    console.log(timeNextWave);
+
+    if (timeNextWave <= 0) {
+      timeNextWave = defaultTimeNextWave;
+      makeTaskWave(difficulty, 4);
+    }
+
+    difficulty += delay/1000;
 
     renderTasks(delay);
 
@@ -123,18 +137,32 @@ $(document).ready ( function() {
       result = task.docElement;
     }
     else {
+      console.log("make");
       result = $("<div>");
       result.addClass("task");
+
+      frontend_bar = $("<div>");
+      frontend_bar.addClass("frontend");
+      frontend_bar.css("background-color", "blue");
+      frontend_bar.css("height", 10);
+
+      backend_bar = $("<div>");
+      backend_bar.addClass("backend");
+      backend_bar.css("background-color", "green");
+      backend_bar.css("height", 10);
+
+      result.append(frontend_bar);
+      result.append(backend_bar);
+
       $("#tasks").append(result);
       task.docElement = result;
     }
-
 
     var tmp;
 
     result.width(100);
     result.height(100);
-    result.css("background-color", "red");
+    result.css("background-color", "gray");
     result.css("top", 
       (1 - task.secondsLeft / task.secondsTotal) * deadlineY -
         result.height()
@@ -142,18 +170,25 @@ $(document).ready ( function() {
       );
     result.css("left", task.left);
 
-    result.html('' + task.frontend_left + ' - ' +
-        task.backend_left);
+    result.children(".frontend").width( 100*task.frontend_left/task.frontend );
+    result.children(".backend").width( 100*task.backend_left/task.backend );
+
+    // result.html('' + task.frontend_left + ' - ' +
+    //     task.backend_left);
 
     // mousedown instead of click, to trigger more easily
     result.on("mousedown", function(event) {
       task.assigned = party[active_party-1];
       party[active_party-1].assignedTask = 
         tasks.indexOf(task);
-//        $.grep(tasks, function(e) { return task === e; });
 
-      //tasks.find(task);
     });
+
+    if (task.secondsLeft <= 0 && !task.isDone() ) {
+      alert("GAME OVER, difficulty=" + difficulty);
+      tasks = [];
+
+    }
 
     return result;
   }
